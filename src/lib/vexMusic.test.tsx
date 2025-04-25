@@ -1,4 +1,4 @@
-import {fillWithRests, getNotesAtTickable, splitIntoMeasures} from "@/lib/vexMusic";
+import {fillWithRests, splitIntoMeasures} from "@/lib/vexMusic";
 import {render} from "@testing-library/react";
 import _ from "lodash";
 import {renderVex} from "@/lib/vexRenderer";

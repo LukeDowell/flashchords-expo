@@ -1,4 +1,3 @@
-
 import JSDOMEnvironment from 'jest-environment-jsdom';
 
 // ReferenceError: structuredClone is not defined

@@ -7,6 +7,7 @@ import {ReactElement} from "react";
 import MidiPiano from "@/lib/music/MidiPiano";
 import 'whatwg-fetch'
 import {MidiPianoContext} from '@/lib/react/contexts';
+import "jest-canvas-mock"
 
 
 // Allows us to ignore audio content in our tests while still using jsdom

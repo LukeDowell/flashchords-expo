@@ -3,6 +3,10 @@ import _ from "lodash";
 import {renderVex} from "@/lib/vexRenderer";
 
 describe('the vex renderer', () => {
+  beforeAll(() => {
+    jest.spyOn(console, "warn").mockImplementation(() => {})
+  })
+
   it('should render', () => {
     const renderElementId = _.uniqueId('vexRendererTest')
     render(<div id={renderElementId}/>)
