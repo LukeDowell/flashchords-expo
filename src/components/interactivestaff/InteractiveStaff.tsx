@@ -10,7 +10,6 @@ import {notesToStaveNote} from "@/lib/vexMusic";
 
 
 type Result = {
-
   /** Instant that the game started */
   gameStartTime: number,
 

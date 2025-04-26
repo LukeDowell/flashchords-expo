@@ -3,6 +3,11 @@
   "compilerOptions": {
     "allowJs": true,
     "strict": true,
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ],
     "paths": {
       "@/*": [
         "./src/*"
@@ -12,7 +17,8 @@
       ]
     },
     "types": [
-      "@testing-library/jest-dom", "webmidi"
+      "@testing-library/jest-dom",
+      "webmidi"
     ]
   },
   "include": [
