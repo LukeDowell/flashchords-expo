@@ -1,5 +1,5 @@
 import {Note} from "@/lib/music/Note";
-import {Accidental, ChordSymbol, Stave, StaveNote, StemmableNote, Tickable, Voice} from "vexflow";
+import {Accidental, ChordSymbol, Stave, StaveNote, StemmableNote, Tickable, Voice} from "vexflow4";
 import {Chord} from "@/lib/music/Chord";
 
 type NotesToStaveNoteOptions = {

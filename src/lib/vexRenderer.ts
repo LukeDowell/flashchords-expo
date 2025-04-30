@@ -1,4 +1,4 @@
-import {Renderer, Stave, StemmableNote, SVGContext, Voice, Factory} from "vexflow";
+import {Renderer, Stave, StemmableNote, SVGContext, Voice, Factory} from "vexflow4";
 import {splitIntoMeasures} from "@/lib/vexMusic";
 import _ from "lodash";
 
@@ -63,8 +63,8 @@ export function renderVex(elementId: string, config: RenderVexConfig = {}): { ve
       width: 300,
       y: 100,
       formatOptions: {
-        alignRests: true,
-        autoBeam: true
+        align_rests: true,
+        auto_beam: true
       },
       debugFormatter: true,
     })

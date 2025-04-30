@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {getKey, MusicKey, notesInKey} from "@/lib/music/Circle";
-import {Formatter, Stave, Voice} from "vexflow";
+import {Formatter, Stave, Voice} from "vexflow4";
 import {Note, placeOnOctave} from "@/lib/music/Note";
 import {Chord} from "@/lib/music/Chord";
 import {notesToStaveNote} from "@/lib/vexMusic";

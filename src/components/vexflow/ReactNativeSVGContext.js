@@ -1,5 +1,5 @@
 import React from 'react';
-import { SVGContext, Font } from 'vexflow';
+import { SVGContext, Font } from 'vexflow4';
 import Svg, { G, Path, Rect } from 'react-native-svg';
 import FontPack from './NotoFontPack'
 

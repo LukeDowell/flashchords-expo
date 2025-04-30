@@ -40,7 +40,6 @@ const NotoFontPack = {
     if (style['font-style'] === 'italic') fontStyle += 'italic';
     if (fontStyle.length === 0) fontStyle = 'regular';
 
-    console.log('Getting font', fontName, fontStyle, this[fontName][fontStyle])
     return this[fontName][fontStyle];
   }
 };

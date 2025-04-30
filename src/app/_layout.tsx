@@ -49,16 +49,19 @@ export default function RootLayout() {
     requestMIDIAccess().then((midiAccess) => {
       const tempInputs: WebMidi.MIDIInput[] = []
       for (let [id, input] of midiAccess.inputs) {
+        console.log('inputs', id, input)
         tempInputs.push(input)
       }
 
       setInputs(tempInputs)
       if (selectedInput === '' && tempInputs.length > 0) {
+        console.log('selecting input')
         // handleInputSelected(tempInputs[0].name || tempInputs[0].id)
         const selectedName = tempInputs[0].name || tempInputs[0].id
         let inputProbably = Array.from(inputs).find((input) => input.name === selectedName)
         if (inputProbably === undefined) {
           inputProbably = Array.from(inputs).find((input) => input.id === selectedName)
+          console.log('Input probably', inputProbably, selectedName)
         }
         if (inputProbably === undefined) {
           console.error('Selected ID that does not exist!')

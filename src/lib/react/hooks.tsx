@@ -1,5 +1,5 @@
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from 'react'
-import {Renderer, SVGContext} from "vexflow";
+import {Renderer, SVGContext} from "vexflow4";
 import {Soundfont} from 'smplr'
 import _ from "lodash";
 import {MidiPianoContext, WebAudioContext} from "@/lib/react/contexts";

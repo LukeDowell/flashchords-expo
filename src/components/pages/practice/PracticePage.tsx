@@ -37,28 +37,12 @@ const StyledRoot = styled.View`
   justify-content: flex-start;
   align-items: center;
   min-width: 100%;
-
-  .timer {
-    margin-top: 0;
-    width: 50%;
-    height: 1vmax;
-    margin-bottom: 5rem
-  }
-
-  #vexflow-output {
-    min-height: 280px;
-  }
-
-  #vexflow-output svg {
-    overflow: visible;
-  }
 `
 
 const ChordSymbolPrompt = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
 `
 
 const CurrentChordSymbol = styled.Text`
