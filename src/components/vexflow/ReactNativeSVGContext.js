@@ -1,5 +1,5 @@
 import React from 'react';
-import { SVGContext } from 'vexflow';
+import { SVGContext, Font } from 'vexflow';
 import Svg, { G, Path, Rect } from 'react-native-svg';
 import FontPack from './NotoFontPack'
 
@@ -111,7 +111,6 @@ export default class ReactNativeSVGContext extends SVGContext {
       g: G,
     };
 
-    console.log('Creating ', element)
     for (let i = 0; i < element.children.length; i++) {
       children.push(this.createReactElement(element.children[i]));
     }
