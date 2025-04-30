@@ -1,6 +1,5 @@
 import opentype from 'opentype.js';
-import converter from 'base64-arraybuffer';
-const decode = converter.decode;
+import { decode } from 'base64-arraybuffer'
 
 import NotoSansRegular from './fonts/NotoSans-Regular.ttf.js';
 import NotoSansItalic from './fonts/NotoSans-Italic.ttf.js';

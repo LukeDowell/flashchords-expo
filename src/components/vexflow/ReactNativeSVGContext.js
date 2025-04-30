@@ -111,6 +111,7 @@ export default class ReactNativeSVGContext extends SVGContext {
       g: G,
     };
 
+    console.log('Creating ', element)
     for (let i = 0; i < element.children.length; i++) {
       children.push(this.createReactElement(element.children[i]));
     }

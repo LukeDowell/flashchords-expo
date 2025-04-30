@@ -36,6 +36,7 @@ const StyledRoot = styled.View`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  min-width: 100%;
 
   .timer {
     margin-top: 0;
