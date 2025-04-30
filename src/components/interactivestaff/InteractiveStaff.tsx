@@ -1,12 +1,11 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useEffect, useState} from "react"
 import {getKey, MusicKey, notesInKey} from "@/lib/music/Circle";
 import {Formatter, Stave, Voice} from "vexflow";
 import {Note, placeOnOctave} from "@/lib/music/Note";
 import {Chord} from "@/lib/music/Chord";
 import {notesToStaveNote} from "@/lib/vexMusic";
-import {Platform, useWindowDimensions} from "react-native";
-import Canvas from "react-native-canvas";
-import {ReactNativeCanvasContext} from "@/components/vexflow/ReactNativeCanvasContext";
+import {useWindowDimensions, View} from "react-native";
+import ReactNativeSVGContext from "@/components/vexflow/ReactNativeSVGContext";
 
 
 type Result = {
@@ -40,30 +39,17 @@ export function InteractiveStaff(props: Props) {
   } = props
 
   const {height, width} = useWindowDimensions()
-  const [canvasRef, setCanvasRef] = useState(undefined as Canvas | undefined)
-
-  const handleCanvas = useCallback((canvas: Canvas | null) => {
-    if (canvas) {
-      setCanvasRef(canvas)
-    }
-  }, [])
+  const [svgContext, setSvgContext] = useState(undefined as ReactNativeSVGContext | undefined)
 
   useEffect(() => {
-    if (!canvasRef) {
-      console.log("no canvas")
-      return
-    }
-    const context = new ReactNativeCanvasContext(canvasRef, canvasRef.getContext('2d'))
-    canvasRef.width = width - (width / 18)
-    canvasRef.height = height / 4
+    const context = new ReactNativeSVGContext({width: width - (width / 18), height: height / 4})
     // context.scale(1.3, 1.3)
 
     // Build a stave
     const keySignatureStaveSize = width / 8
     const staveMarginTop = 75
     const keySignatureStave = new Stave(0, staveMarginTop, keySignatureStaveSize)
-    keySignatureStave.addClef('treble').addTimeSignature('4/4')
-      .addKeySignature(musicKey.root.withOctave(undefined).toString())
+    keySignatureStave.addClef('treble').addTimeSignature('4/4').addKeySignature(musicKey.root.withOctave(undefined).toString())
     keySignatureStave.setContext(context).draw()
 
     // Additional stave per chord
@@ -84,11 +70,11 @@ export function InteractiveStaff(props: Props) {
 
       voice.draw(context, chordStave)
     })
+
+    setSvgContext(context)
   }, [musicKey, chords, width, height, chordVoicings])
 
-  if (Platform.OS === "web") {
-    // return <canvas style={{width, height}} ref={handleCanvas}/>
-  } else {
-    return <Canvas style={{width, height}} ref={handleCanvas}/>
-  }
+  return (<View>
+    {svgContext ? svgContext.render() : false}
+  </View>)
 }
