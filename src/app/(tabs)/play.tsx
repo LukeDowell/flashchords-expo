@@ -1,18 +1,19 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import PracticePage from "@/components/pages/practice/PracticePage";
 import {useEffect, useState} from "react";
 import MidiPiano from "@/lib/music/MidiPiano";
 import {useAudio} from "@/lib/react/hooks";
 import {InstrumentContext, MidiInputContext, MidiPianoContext, WebAudioContext } from '@/lib/react/contexts';
 import { requestMIDIAccess } from "@motiz88/react-native-midi"
-export default function TabTwoScreen() {
+
+export default function TabThreeScreen() {
   const [midiPiano, setMidiPiano] = useState<MidiPiano>(new MidiPiano())
   const [midiContext, setMidiContext] = useState<WebMidi.MIDIInput | undefined>(undefined)
   const [selectedInput, setSelectedInput] = useState<string>('')
   const [inputs, setInputs] = useState<WebMidi.MIDIInput[]>([])
   const [sample, setSample] = useState('electric_grand_piano')
   const inputIds = inputs.map(i => i.id).sort() // MIDIInputs are complex objects, and the useEffect equality check gets messed up
-  const audioContext = useAudio()
+  // const audioContext = useAudio()
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -54,16 +55,16 @@ export default function TabTwoScreen() {
         }
       }
     })
-  }, [inputIds, selectedInput])
+  }, [])
 
   return (
     <MidiPianoContext.Provider value={midiPiano}>
       <MidiInputContext.Provider value={midiContext}>
-        <WebAudioContext.Provider value={audioContext}>
+        {/*<WebAudioContext.Provider value={audioContext}>*/}
           <InstrumentContext.Provider value={sample}>
             <PracticePage />
           </InstrumentContext.Provider>
-        </WebAudioContext.Provider>
+        {/*</WebAudioContext.Provider>*/}
       </MidiInputContext.Provider>
     </MidiPianoContext.Provider>
   );

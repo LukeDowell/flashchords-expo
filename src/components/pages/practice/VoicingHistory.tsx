@@ -1,56 +1,56 @@
 import * as React from 'react'
-import styled from "@emotion/styled"
+import styled from "@emotion/native"
 import {NATURAL, Note} from "@/lib/music/Note";
 import {MusicKey, notesInKey} from "@/lib/music/Circle";
 import {Chord} from "@/lib/music/Chord";
 
-const StyledRoot = styled('div')`
+const StyledRoot = styled.View`
   display: flex;
   flex-direction: column;
   width: 80%;
   min-width: 80%;
+`
 
-  .header {
+const TitleText = styled.Text`
+    text-align: left;
+    flex: 1;
+    font-size: 3vmax;
+`
+
+const Header = styled.View`
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     padding-bottom: .5rem;
     padding-left: 1rem
-  }
+`
 
-  .title {
-    text-align: left;
-    flex: 1;
-    font-size: 3vmax;
-  }
-
-  .voicings {
+const Voicings = styled.View`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     font-size: 2.5vmax;
-  }
 `
 
-const StyledVoicingRoot = styled('div')`
+const StyledVoicingRoot = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
   border-top: 2px solid black;
+`
 
-  .chord {
+const VoicingChord = styled.View`
     flex: 1;
     text-align: left;
     padding-left: 1rem;
-  }
+`
 
-  .notes {
+const VoicingNotes = styled.View`
     flex: 1;
     text-align: left;
-  }
 `
 
 export interface VoicingResult {
@@ -76,8 +76,8 @@ const toVoicingComponent = (v: VoicingResult, i: number) => {
   })
 
   return <Styled key={i} data-testid={isSuccess ? `${chordSymbol}-valid-voicing` : `${chordSymbol}-invalid-voicing`}>
-    <span className="chord">{chordSymbol}</span>
-    <span className="notes">{prettyNotes}</span>
+    <VoicingChord>{chordSymbol}</VoicingChord>
+    <VoicingNotes>{prettyNotes}</VoicingNotes>
   </Styled>
 }
 
@@ -85,12 +85,12 @@ export const VoicingHistory = ({voicingResults}: Props) => {
   const newestOnTopResults = [...voicingResults].reverse()
 
   return <StyledRoot>
-    <div className="header">
-      <span className="title">Chord</span>
-      <span className="title">Notes</span>
-    </div>
-    <div className="voicings">
+    <Header>
+      <TitleText>Chord</TitleText>
+      <TitleText>Notes</TitleText>
+    </Header>
+    <Voicings>
       {newestOnTopResults.map(toVoicingComponent)}
-    </div>
+    </Voicings>
   </StyledRoot>
 }

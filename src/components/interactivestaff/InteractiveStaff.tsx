@@ -1,12 +1,12 @@
-'use client'
-
-import React, {useEffect, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {getKey, MusicKey, notesInKey} from "@/lib/music/Circle";
-import {Formatter, Renderer, Stave, Voice} from "vexflow";
+import {Formatter, Stave, Voice} from "vexflow";
 import {Note, placeOnOctave} from "@/lib/music/Note";
-import {useWindowSize} from "@/lib/react/hooks";
 import {Chord} from "@/lib/music/Chord";
 import {notesToStaveNote} from "@/lib/vexMusic";
+import {Platform, useWindowDimensions} from "react-native";
+import Canvas from "react-native-canvas";
+import {ReactNativeCanvasContext} from "@/components/vexflow/ReactNativeCanvasContext";
 
 
 type Result = {
@@ -39,22 +39,27 @@ export function InteractiveStaff(props: Props) {
     }
   } = props
 
-  const [windowWidth, windowHeight] = useWindowSize()
-  const [gameStartTime, setGameStartTime] = useState<number | undefined>(undefined)
+  const {height, width} = useWindowDimensions()
+  const [canvasRef, setCanvasRef] = useState(undefined as Canvas | undefined)
+
+  const handleCanvas = useCallback((canvas: Canvas | null) => {
+    if (canvas) {
+      setCanvasRef(canvas)
+    }
+  }, [])
 
   useEffect(() => {
-    // Grab div and wipe it
-    const renderDiv: HTMLDivElement = document.getElementById('vexflow-output') as HTMLDivElement
-    renderDiv.innerHTML = ''
-
-    // Set up renderer and drawing context
-    const renderer = new Renderer(renderDiv, Renderer.Backends.SVG)
-    const context = renderer.getContext()
-    context.resize(windowWidth - (windowWidth / 18), windowHeight / 4)
-    context.scale(1.3, 1.3)
+    if (!canvasRef) {
+      console.log("no canvas")
+      return
+    }
+    const context = new ReactNativeCanvasContext(canvasRef, canvasRef.getContext('2d'))
+    canvasRef.width = width - (width / 18)
+    canvasRef.height = height / 4
+    // context.scale(1.3, 1.3)
 
     // Build a stave
-    const keySignatureStaveSize = windowWidth / 8
+    const keySignatureStaveSize = width / 8
     const staveMarginTop = 75
     const keySignatureStave = new Stave(0, staveMarginTop, keySignatureStaveSize)
     keySignatureStave.addClef('treble').addTimeSignature('4/4')
@@ -64,7 +69,7 @@ export function InteractiveStaff(props: Props) {
     // Additional stave per chord
     chords?.forEach((c: Chord, i) => {
       const staveWidth = keySignatureStaveSize * (i + 1)
-      const chordStave = new Stave(staveWidth, staveMarginTop, windowWidth / 8)
+      const chordStave = new Stave(staveWidth, staveMarginTop, width / 8)
       chordStave.setContext(context).draw()
 
       const chordVoicing = chordVoicings[i - 1]
@@ -79,7 +84,11 @@ export function InteractiveStaff(props: Props) {
 
       voice.draw(context, chordStave)
     })
-  }, [musicKey, chords, windowWidth, windowHeight, chordVoicings])
+  }, [musicKey, chords, width, height, chordVoicings])
 
-  return <div id={'vexflow-output'}/>
+  if (Platform.OS === "web") {
+    // return <canvas style={{width, height}} ref={handleCanvas}/>
+  } else {
+    return <Canvas style={{width, height}} ref={handleCanvas}/>
+  }
 }

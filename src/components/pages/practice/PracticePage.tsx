@@ -14,7 +14,7 @@ import {
 } from "@/lib/music/Circle";
 import {InteractiveStaff} from "@/components/interactivestaff/InteractiveStaff";
 import {Chord} from "@/lib/music/Chord";
-import styled from "@emotion/styled";
+import styled from "@emotion/native";
 import {NoteEvent} from "@/lib/music/MidiPiano";
 import {InstrumentContext, MidiPianoContext} from "@/lib/react/contexts";
 import {IconSymbol} from "@/components/ui/IconSymbol";
@@ -31,7 +31,7 @@ export const generateChordFromSettings = (settings: Settings): [Chord, MusicKey]
 }
 
 
-const StyledRoot = styled('div')`
+const StyledRoot = styled.View`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -53,17 +53,17 @@ const StyledRoot = styled('div')`
   }
 `
 
-const ChordSymbolPrompt = styled('div')`
+const ChordSymbolPrompt = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
+`
 
-  .current-chord-symbol {
+const CurrentChordSymbol = styled.Text`
     font-size: 10vmax;
     margin-top: 0;
     margin-bottom: 0;
-  }
 `
 
 export default function PracticePage({
@@ -73,7 +73,7 @@ export default function PracticePage({
                                      }: Props) {
   const piano = useContext(MidiPianoContext)
   const sample = useContext(InstrumentContext)
-  const instrument = useInstrument(sample, true)
+  // const instrument = useInstrument(sample, true)
   const [currentChord, setCurrentChord] = useState<Chord>(initialChord)
   const [currentKey, setCurrentKey] = useState<MusicKey>(initialKey)
   const [timeOfLastSuccess, setTimeOfLastSuccess] = useState(Date.now())
@@ -130,7 +130,7 @@ export default function PracticePage({
 
   return <StyledRoot>
     <ChordSymbolPrompt>
-      <h2 className="current-chord-symbol">{currentChord.toString()}</h2>
+      <CurrentChordSymbol>{currentChord.toString()}</CurrentChordSymbol>
       {shouldDisplaySuccess && <IconSymbol color={"green"} name={"checkmark"}/>}
     </ChordSymbolPrompt>
     <InteractiveStaff musicKey={currentKey}
