@@ -31,6 +31,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     const abortController = new AbortController()
+    console.log("Requesting midi access...")
     requestMIDIAccess().then((midiAccess) => {
       midiAccess.addEventListener(
         'statechange',
@@ -41,7 +42,7 @@ export default function RootLayout() {
         },
         {signal: abortController.signal}
       )
-    })
+    }).catch((e) => console.error('Error requesting access', e))
     return () => abortController.abort('cleanup')
   }, [])
 
@@ -58,9 +59,9 @@ export default function RootLayout() {
         console.log('selecting input')
         // handleInputSelected(tempInputs[0].name || tempInputs[0].id)
         const selectedName = tempInputs[0].name || tempInputs[0].id
-        let inputProbably = Array.from(inputs).find((input) => input.name === selectedName)
+        let inputProbably = Array.from(tempInputs).find((input) => input.name === selectedName)
         if (inputProbably === undefined) {
-          inputProbably = Array.from(inputs).find((input) => input.id === selectedName)
+          inputProbably = Array.from(tempInputs).find((input) => input.id === selectedName)
           console.log('Input probably', inputProbably, selectedName)
         }
         if (inputProbably === undefined) {
