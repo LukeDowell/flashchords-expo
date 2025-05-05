@@ -6,7 +6,7 @@ import PracticePage from "@/components/pages/practice/PracticePage";
 import {useEffect, useState} from "react";
 import MidiPiano from "@/lib/music/MidiPiano";
 import {InstrumentContext, MidiInputContext, MidiPianoContext} from '@/lib/react/contexts';
-import {requestMIDIAccess} from "@motiz88/react-native-midi"
+import {requestMIDIAccess, MIDIConnectionEvent, MIDIInput} from "react-native-midi"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -16,10 +16,10 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
   });
-  const [midiPiano, setMidiPiano] = useState<MidiPiano>(new MidiPiano())
-  const [midiContext, setMidiContext] = useState<WebMidi.MIDIInput | undefined>(undefined)
-  const [selectedInput, setSelectedInput] = useState<string>('')
-  const [inputs, setInputs] = useState<WebMidi.MIDIInput[]>([])
+  const [midiPiano, setMidiPiano] = useState(undefined as MidiPiano | undefined)
+  const [midiContext, setMidiContext] = useState(undefined as MIDIInput | undefined)
+  const [selectedInput, setSelectedInput] = useState('')
+  const [inputs, setInputs] = useState<MIDIInput[]>([])
   const [sample, setSample] = useState('electric_grand_piano')
   const inputIds = inputs.map(i => i.id).sort() // MIDIInputs are complex objects, and the useEffect equality check gets messed up
 
@@ -35,7 +35,7 @@ export default function RootLayout() {
     requestMIDIAccess().then((midiAccess) => {
       midiAccess.addEventListener(
         'statechange',
-        (connectionEvent: WebMidi.MIDIConnectionEvent) => {
+        (connectionEvent: MIDIConnectionEvent) => {
           console.log('connectionEvent', connectionEvent)
           setSelectedInput('')
           setInputs([])
@@ -48,7 +48,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     requestMIDIAccess().then((midiAccess) => {
-      const tempInputs: WebMidi.MIDIInput[] = []
+      const tempInputs: MIDIInput[] = []
       for (let [id, input] of midiAccess.inputs) {
         console.log('inputs', id, input)
         tempInputs.push(input)

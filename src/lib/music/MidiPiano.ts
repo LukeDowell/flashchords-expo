@@ -1,5 +1,6 @@
 import {KEYBOARD, Note} from "./Note";
 import _ from "lodash";
+import { MIDIMessageEvent, MIDIInput} from "react-native-midi";
 
 export const MIDI = {
   KEY_DOWN: 144,
@@ -29,12 +30,12 @@ export default class MidiPiano {
   private readonly _noteHistory: NoteEvent[] = []
   private _subscribers: Map<string, NoteSubscriber> = new Map()
 
-  constructor(midiInput?: WebMidi.MIDIInput) {
+  constructor(midiInput?: MIDIInput) {
     console.log('BUILDING MIDI PIANO', midiInput)
     midiInput?.addEventListener("midimessage", this._processMIDIEvent.bind(this))
   }
 
-  private _processMIDIEvent(midiEvent: WebMidi.MIDIMessageEvent) {
+  private _processMIDIEvent(midiEvent: MIDIMessageEvent) {
     console.log('MIDI EVENT', midiEvent)
     const midiNote = midiEvent.data[1]
     const note = KEYBOARD[midiNote - MIDI_KEYBOARD_OFFSET]

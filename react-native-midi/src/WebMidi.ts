@@ -1,0 +1,11 @@
+export * from "./MIDIAccess";
+export * from "./MIDIConnectionEvent";
+export * from "./MIDIMessageEvent";
+export * from "./MIDIInput";
+export * from "./MIDIInputMap";
+export * from "./MIDIOutputMap";
+export * from "./MIDIOptions";
+export * from "./MIDIOutput";
+export * from "./MIDIPort";
+export * from "./requestMIDIAccess";
+export type { CallbackFunction } from "./event-target-shim-shim";

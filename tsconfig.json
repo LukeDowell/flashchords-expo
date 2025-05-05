@@ -14,7 +14,9 @@
       ],
       "@/assets/*": [
         "./assets/*"
-      ]
+      ],
+      "react-native-midi": ["./react-native-midi/src/index"],
+      "react-native-midi/*": ["./react-native-midi/src/*"]
     },
     "types": [
       "@testing-library/jest-dom",
