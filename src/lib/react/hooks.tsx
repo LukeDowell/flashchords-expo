@@ -9,7 +9,9 @@ export function useInterval(callback: () => void, delay: number | null) {
   const savedCallback = useRef(callback)
 
   // Remember the latest callback if it changes.
-  useEffect(() => savedCallback.current = callback, [callback])
+  useEffect(() => {
+    savedCallback.current = callback
+  }, [callback])
 
   // Set up the interval.
   useEffect(() => {
@@ -18,7 +20,9 @@ export function useInterval(callback: () => void, delay: number | null) {
     if (!delay && delay !== 0) {
       return
     }
-    const id = setInterval(() => savedCallback.current(), delay)
+    const id = setInterval(() => {
+      savedCallback.current()
+    }, delay)
     return () => clearInterval(id)
   }, [delay])
 }
@@ -87,7 +91,7 @@ export function useInstrument(sample = 'electric_grand_piano', listenToMidi?: bo
   const piano = useContext(MidiPianoContext)
 
   useSSRLayoutEffect(() => {
-    if (!audioContext) return
+    if (!audioContext || !piano) return
     const player = new Soundfont(audioContext, {instrument: sample})
     const listenerId = _.uniqueId(`instrument-${sample}`)
 
@@ -110,7 +114,7 @@ export function useInstrument(sample = 'electric_grand_piano', listenToMidi?: bo
       piano.removeSubscriber(listenerId)
       setInstrument(undefined)
     }
-  }, [sample, audioContext])
+  }, [sample, audioContext, piano])
 
   return instrument
 }

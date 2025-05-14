@@ -8,7 +8,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --forceExit",
     "lint": "expo lint"
   },
   "dependencies": {
@@ -28,7 +28,7 @@
     "expo-font": "~13.0.3",
     "expo-haptics": "~14.0.1",
     "expo-linking": "~7.0.5",
-    "expo-router": "~4.0.20",
+    "expo-router": "~4.0.21",
     "expo-splash-screen": "~0.29.24",
     "expo-status-bar": "~2.0.1",
     "expo-symbols": "~0.2.2",
@@ -60,11 +60,9 @@
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.17.16",
     "@types/react": "~18.3.12",
-    "@types/react-test-renderer": "^18.3.0",
     "jest": "^29.2.1",
     "jest-environment-jsdom": "^29.7.0",
     "jest-expo": "~52.0.6",
-    "react-test-renderer": "18.3.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "typescript-plugin-css-modules": "^5.1.0"

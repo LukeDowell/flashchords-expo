@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {VoicingHistory, VoicingResult} from "@/components/pages/practice/VoicingHistory";
-import {render, screen} from "@testing-library/react";
+import {render, screen, waitFor} from "@testing-library/react-native";
 import {toNote} from "@/lib/music/Note";
 import {getKey} from "@/lib/music/Circle";
 import {Chord} from "@/lib/music/Chord";
@@ -18,8 +18,7 @@ describe('the voicing history component', () => {
 
     render(<VoicingHistory voicingResults={voicingResults}/>)
 
-    const expected = await screen.findByText(/Db, F, Ab/)
-    expect(expected).toBeInTheDocument()
+    expect(screen.getByText(/Db, F, Ab/)).toBeOnTheScreen()
   })
 
   it('should render the required notes for a voicing if none are provided', async () => {
@@ -33,7 +32,6 @@ describe('the voicing history component', () => {
 
     render(<VoicingHistory voicingResults={voicingResults}/>)
 
-    const expected = await screen.findByText(/C, Eb, Gb/)
-    expect(expected).toBeInTheDocument()
+    expect(screen.getByText(/C, Eb, Gb/)).toBeOnTheScreen()
   })
 })

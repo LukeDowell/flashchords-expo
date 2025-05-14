@@ -1,14 +1,15 @@
 import {findNoteOnKeyboard, Note, standardizeNote} from "@/lib/music/Note";
 import {MIDI, MIDI_KEYBOARD_OFFSET} from "@/lib/music/MidiPiano";
+import {MIDIMessageEvent} from "react-native-midi";
 
 /**
  * For tests
  */
 export class NoteEmitter {
-  private readonly _midiHook: (e: WebMidi.MIDIMessageEvent) => any
+  private readonly _midiHook: (e: MIDIMessageEvent) => any
   private readonly _queuedActions: Array<() => Promise<any>>
 
-  constructor(midiHook: (e: WebMidi.MIDIMessageEvent) => any) {
+  constructor(midiHook: (e: MIDIMessageEvent) => any) {
     this._midiHook = midiHook
     this._queuedActions = []
   }
@@ -50,7 +51,7 @@ export class NoteEmitter {
   }
 }
 
-const noteToMidiEvent = (flag: number, notes: Note[] | string[], velocity: number = 50): WebMidi.MIDIMessageEvent[] => {
+const noteToMidiEvent = (flag: number, notes: Note[] | string[], velocity: number = 50): MIDIMessageEvent[] => {
   const consolidateType = (n: Note | string): Note => {
     if (typeof n === 'string') return Note.of(n)
     return n
@@ -68,6 +69,6 @@ const noteToMidiEvent = (flag: number, notes: Note[] | string[], velocity: numbe
         ...new Event('midi'),
         receivedTime: new Date().getTime(),
         data: array
-      } as WebMidi.MIDIMessageEvent
+      } as MIDIMessageEvent
     })
 }

@@ -14,7 +14,7 @@ const StyledRoot = styled.View`
 const TitleText = styled.Text`
     text-align: left;
     flex: 1;
-    font-size: 3vmax;
+    font-size: 16px;
 `
 
 const Header = styled.View`
@@ -30,7 +30,7 @@ const Voicings = styled.View`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    font-size: 2.5vmax;
+    font-size: 12px;
 `
 
 const StyledVoicingRoot = styled.View`
@@ -42,13 +42,13 @@ const StyledVoicingRoot = styled.View`
   border-top: 2px solid black;
 `
 
-const VoicingChord = styled.View`
+const VoicingChord = styled.Text`
     flex: 1;
     text-align: left;
     padding-left: 1rem;
 `
 
-const VoicingNotes = styled.View`
+const VoicingNotes = styled.Text`
     flex: 1;
     text-align: left;
 `
@@ -75,7 +75,7 @@ const toVoicingComponent = (v: VoicingResult, i: number) => {
     backgroundColor: isSuccess ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)"
   })
 
-  return <Styled key={i} data-testid={isSuccess ? `${chordSymbol}-valid-voicing` : `${chordSymbol}-invalid-voicing`}>
+  return <Styled key={i} testID={isSuccess ? `${chordSymbol}-valid-voicing` : `${chordSymbol}-invalid-voicing`}>
     <VoicingChord>{chordSymbol}</VoicingChord>
     <VoicingNotes>{prettyNotes}</VoicingNotes>
   </Styled>

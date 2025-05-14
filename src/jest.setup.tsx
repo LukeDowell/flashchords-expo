@@ -1,12 +1,10 @@
-// Optional: configure or set up a testing framework before each test.
-// If you delete this file, remove `setupFilesAfterEnv` from `jest.config.js`
-
 import '@testing-library/jest-dom'
-import {render, RenderOptions, RenderResult} from "@testing-library/react";
+import {render, RenderOptions, RenderResult} from "@testing-library/react-native";
 import {ReactElement} from "react";
 import MidiPiano from "@/lib/music/MidiPiano";
 import 'whatwg-fetch'
 import {MidiPianoContext} from '@/lib/react/contexts';
+import {MIDIInput, MIDIMessageEvent} from "react-native-midi";
 import "jest-canvas-mock"
 
 
@@ -32,20 +30,20 @@ Object.defineProperty(global, 'navigator', {
   }
 })
 
-type MidiCallback = (e: WebMidi.MIDIMessageEvent) => void
+type MidiCallback = (e: MIDIMessageEvent) => void
 
 export function midiRender(ui: ReactElement<any>, options?: Omit<RenderOptions, 'queries'>): [MidiPiano, MidiCallback, RenderResult] {
-  let midiCallback = (e: WebMidi.MIDIMessageEvent) => {
+  let midiCallback = (e: MIDIMessageEvent) => {
   }
-  const mockedMidiInput: Partial<WebMidi.MIDIInput> = {
+  const mockedMidiInput: Partial<MIDIInput> = {
     addEventListener: jest.fn().mockImplementation(() => {
     })
   }
-  mockedMidiInput.addEventListener = jest.fn().mockImplementation((key: string, callback: (e: WebMidi.MIDIMessageEvent) => void) => {
+  mockedMidiInput.addEventListener = jest.fn().mockImplementation((key: string, callback: (e: MIDIMessageEvent) => void) => {
     midiCallback = callback
   })
 
-  const midiPiano = new MidiPiano(mockedMidiInput as WebMidi.MIDIInput)
+  const midiPiano = new MidiPiano(mockedMidiInput as MIDIInput)
 
   return [
     midiPiano,

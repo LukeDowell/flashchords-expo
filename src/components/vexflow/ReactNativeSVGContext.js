@@ -128,6 +128,7 @@ export default class ReactNativeSVGContext extends SVGContext {
   }
 
   render() {
+    console.log("rendering lul")
     return this.createReactElement(this.svg);
   }
 }

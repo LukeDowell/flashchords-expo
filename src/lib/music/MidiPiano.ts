@@ -31,12 +31,10 @@ export default class MidiPiano {
   private _subscribers: Map<string, NoteSubscriber> = new Map()
 
   constructor(midiInput?: MIDIInput) {
-    console.log('BUILDING MIDI PIANO', midiInput)
     midiInput?.addEventListener("midimessage", this._processMIDIEvent.bind(this))
   }
 
   private _processMIDIEvent(midiEvent: MIDIMessageEvent) {
-    console.log('MIDI EVENT', midiEvent)
     const midiNote = midiEvent.data[1]
     const note = KEYBOARD[midiNote - MIDI_KEYBOARD_OFFSET]
     const velocity = midiEvent.data[2]

@@ -42,37 +42,40 @@ export function InteractiveStaff(props: Props) {
   const [svgContext, setSvgContext] = useState(undefined as ReactNativeSVGContext | undefined)
 
   useEffect(() => {
-    const context = new ReactNativeSVGContext({width: width - (width / 18), height: height / 4})
-    // context.scale(1.3, 1.3)
+    const context = new ReactNativeSVGContext({width: width, height: height})
+    setSvgContext(context)
+  }, [width, height])
+
+  useEffect(() => {
+    if (!svgContext) return
 
     // Build a stave
-    const keySignatureStaveSize = width / 8
+    const keySignatureStaveSize = width / 6
     const staveMarginTop = 75
     const keySignatureStave = new Stave(0, staveMarginTop, keySignatureStaveSize)
     keySignatureStave.addClef('treble').addTimeSignature('4/4').addKeySignature(musicKey.root.withOctave(undefined).toString())
-    keySignatureStave.setContext(context).draw()
+    keySignatureStave.setContext(svgContext).draw()
 
     // Additional stave per chord
     chords?.forEach((c: Chord, i) => {
       const staveWidth = keySignatureStaveSize * (i + 1)
       const chordStave = new Stave(staveWidth, staveMarginTop, width / 8)
-      chordStave.setContext(context).draw()
+      chordStave.setContext(svgContext).draw()
 
       const chordVoicing = chordVoicings[i - 1]
       const staveNotes = (chordVoicing && chordVoicing.length > 0)
         ? notesToStaveNote(chordVoicing, {fillStyle: 'green', chord: c})
         : notesToStaveNote(placeOnOctave(4, notesInKey(c.notes(), musicKey)), {chord: c})
 
-      const voice = new Voice({numBeats: 4, beatValue: 4})
+      const voice = new Voice({num_beats: 4, beat_value: 4})
       voice.addTickables([staveNotes])
 
       new Formatter().joinVoices([voice]).format([voice], staveWidth)
 
-      voice.draw(context, chordStave)
+      voice.draw(svgContext, chordStave)
     })
 
-    setSvgContext(context)
-  }, [musicKey, chords, width, height, chordVoicings])
+  }, [svgContext, chords, chordVoicings, width, height]);
 
   return (<View>
     {svgContext ? svgContext.render() : false}

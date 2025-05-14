@@ -1,5 +1,5 @@
 import React from 'react';
-import {act, screen, waitFor} from "@testing-library/react";
+import {act, screen, waitFor} from "@testing-library/react-native";
 import PracticePage from "@/components/pages/practice/PracticePage";
 import {findNoteOnKeyboard, toNote} from "@/lib/music/Note";
 import {midiRender} from "@/jest.setup";
@@ -7,7 +7,7 @@ import {getKey} from "@/lib/music/Circle";
 import {Chord} from "@/lib/music/Chord";
 import {NoteEmitter} from "@/note-emitter";
 import {MIDI, MIDI_KEYBOARD_OFFSET} from "@/lib/music/MidiPiano";
-
+import {MIDIMessageEvent} from "react-native-midi";
 
 describe("the practice page", () => {
   it('should render', () => {
@@ -24,7 +24,7 @@ describe("the practice page", () => {
         .play()
     })
 
-    await waitFor(() => expect(screen.getByTestId('CheckIcon')).toBeInTheDocument())
+    expect(screen.getByTestId('CheckIcon')).toBeOnTheScreen()
   })
 
   it('should show the correct notes for a chord if the user fails to enter a valid voicing in time', async () => {
@@ -33,12 +33,11 @@ describe("the practice page", () => {
       timerEnabled: true,
       timerMilliseconds: 100
     }
-    const [p, i, screen] = midiRender(<PracticePage initialChord={initialChord} initialKey={getKey('C', 'Major')}
+
+    midiRender(<PracticePage initialChord={initialChord} initialKey={getKey('C', 'Major')}
                                                     initialSettings={settings}/>)
 
-    await waitFor(() => {
-      expect(screen.getByText("C, E, G")).toBeInTheDocument()
-    })
+    await waitFor(() => expect(screen.getByText(/C, E, G/)).toBeOnTheScreen())
   })
 
   it('should fail a chord voicing after the timer ends', async () => {
@@ -49,7 +48,7 @@ describe("the practice page", () => {
 
     midiRender(<PracticePage initialChord={new Chord('B#', 'Diminished')} initialSettings={settings}/>)
 
-    await waitFor(() => expect(screen.getByTestId("B#dim-invalid-voicing")).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByTestId("B#dim-invalid-voicing")).toBeOnTheScreen())
   })
 
   it('should be able to successfully play a chord via a midi piano', async () => {
@@ -59,10 +58,12 @@ describe("the practice page", () => {
       }
     })
 
-    const [_, pianoEmitter, screen] = midiRender(<PracticePage initialChord={new Chord('B', 'Diminished')}
+    const [_, pianoEmitter, ignored] = midiRender(<PracticePage initialChord={new Chord('B', 'Diminished')}
                                                                initialKey={getKey('C', 'Major')}/>)
 
-    await act(() => events.forEach((e) => pianoEmitter.call(e, e as WebMidi.MIDIMessageEvent)))
-    await waitFor(() => expect(screen.getByTestId('CheckIcon')).toBeInTheDocument())
+    // Do not remove await
+    await act(() => events.forEach((e) => pianoEmitter.call(e, e as MIDIMessageEvent)))
+
+    await waitFor(() => expect(screen.getByTestId('CheckIcon')).toBeOnTheScreen())
   })
 })

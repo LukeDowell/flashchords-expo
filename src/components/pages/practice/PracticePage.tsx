@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {useInstrument, useInterval} from "@/lib/react/hooks";
+import {useInterval} from "@/lib/react/hooks";
 import {DEFAULT_PRACTICE_SETTINGS, Settings} from "@/components/settings/Settings";
 import {Note} from "@/lib/music/Note";
 import _ from "lodash";
@@ -18,6 +18,7 @@ import styled from "@emotion/native";
 import {NoteEvent} from "@/lib/music/MidiPiano";
 import {InstrumentContext, MidiPianoContext} from "@/lib/react/contexts";
 import {IconSymbol} from "@/components/ui/IconSymbol";
+import {View} from "react-native";
 
 export interface Props {
   initialChord?: Chord,
@@ -39,16 +40,22 @@ const StyledRoot = styled.View`
   min-width: 100%;
 `
 
-const ChordSymbolPrompt = styled.View`
+const StaffContainer = styled.View`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-height: 200px;
+`
+const ChordSymbolPrompt = styled.Text`
   display: flex;
   align-items: center;
   justify-content: center;
 `
 
 const CurrentChordSymbol = styled.Text`
-    font-size: 10vmax;
-    margin-top: 0;
-    margin-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 `
 
 export default function PracticePage({
@@ -78,6 +85,7 @@ export default function PracticePage({
   }, [currentChord, settings])
 
   useEffect(() => {
+    if (!piano) return
     const callback = (noteEvent: NoteEvent, activeNotes: Note[]) => {
       if (isValidVoicingForChord(activeNotes, currentChord)) {
         setShouldDisplaySuccess(true)
@@ -101,7 +109,7 @@ export default function PracticePage({
     if (!inTimeWindow && shouldDisplaySuccess) {
       setShouldDisplaySuccess(false)
     }
-  }, 100)
+  }, 50)
 
   useInterval(() => {
     if (!settings?.timerEnabled) return
@@ -111,17 +119,19 @@ export default function PracticePage({
       setTimeOfLastSuccess(Date.now())
       generateNewChord()
     } else setTimerProgress(Math.floor((timeLeft / (settings.timerMilliseconds)) * 100))
-  }, 100)
+  }, 50)
 
   return <StyledRoot>
     <ChordSymbolPrompt>
       <CurrentChordSymbol>{currentChord.toString()}</CurrentChordSymbol>
-      {shouldDisplaySuccess && <IconSymbol color={"green"} name={"checkmark"}/>}
+      {shouldDisplaySuccess && <IconSymbol testID="CheckIcon" color={"green"} name={"checkmark.circle.fill"}/>}
     </ChordSymbolPrompt>
-    <InteractiveStaff musicKey={currentKey}
-                      chords={[currentChord].concat(_.reverse(voicingResults.slice()).map(v => v.chord))}
-                      chordVoicings={_.reverse(voicingResults.slice()).map(v => v.validNotes)}
-    />
+    <StaffContainer>
+      <InteractiveStaff musicKey={currentKey}
+                        chords={[currentChord].concat(_.reverse(voicingResults.slice()).map(v => v.chord))}
+                        chordVoicings={_.reverse(voicingResults.slice()).map(v => v.validNotes)}
+      />
+    </StaffContainer>
     {/*{settings?.timerEnabled && <LinearProgress className="timer" variant="determinate" value={timerProgress}/>}*/}
     <VoicingHistory voicingResults={voicingResults}/>
   </StyledRoot>
