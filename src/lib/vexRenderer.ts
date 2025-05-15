@@ -1,6 +1,7 @@
 import {Renderer, Stave, StemmableNote, SVGContext, Voice, Factory} from "vexflow4";
 import {splitIntoMeasures} from "@/lib/vexMusic";
 import _ from "lodash";
+import ReactNativeSVGContext from "@/lib/vexflow/ReactNativeSVGContext";
 
 /**
  * @param width TODO what does width mean to vexflow? Max width? width-per-something?
@@ -10,7 +11,9 @@ import _ from "lodash";
  * @param bassVoices Same as trebleVoices, but will be formatted to a bass stave.
  */
 interface RenderVexConfig {
+  context?: ReactNativeSVGContext
   width?: number
+  height?: number
   trebleVoice?: string
   bassVoice?: string
 }
@@ -28,8 +31,9 @@ export interface VexMeasure {
  * @param elementId the id of an HTML element in which the music content will be rendered
  * @param config
  */
-export function renderVex(elementId: string, config: RenderVexConfig = {}): { vexMeasures: VexMeasure[], context: SVGContext, allElements: SVGElement } {
+export function renderVex(config: RenderVexConfig = {}): { vexMeasures: VexMeasure[], context: ReactNativeSVGContext, allElements: SVGElement } {
   const vexWidth = config.width || 400
+  const vexHeight = config.height || 800
   const trebleVoice = config.trebleVoice || ""
   const bassVoice = config.bassVoice || ""
 
@@ -38,17 +42,15 @@ export function renderVex(elementId: string, config: RenderVexConfig = {}): { ve
   }
 
   // Wipe the current score
-  const outputDiv = document.getElementById(elementId) as HTMLDivElement
-  if (outputDiv) outputDiv.innerHTML = ''
-
   const vf = new Factory({
     renderer: {
-      backend: Renderer.Backends.SVG, elementId: elementId, width: vexWidth, height: 800
+      backend: Renderer.Backends.SVG, elementId: null, width: vexWidth, height: vexHeight
     },
     stave: {
       space: 12
     }
   })
+  vf.setContext(config.context || new ReactNativeSVGContext({ width: vexWidth, height: 800}))
   const score = vf.EasyScore()
   const formatter = vf.Formatter()
 
@@ -60,8 +62,8 @@ export function renderVex(elementId: string, config: RenderVexConfig = {}): { ve
   _.zip(trebleMeasures, bassMeasures).forEach(([trebleMeasure, bassMeasure], i) => {
     const system = vf.System({
       x: i * 300,
-      width: 300,
       y: 100,
+      autoWidth: true,
       formatOptions: {
         align_rests: true,
         auto_beam: true
@@ -112,5 +114,5 @@ export function renderVex(elementId: string, config: RenderVexConfig = {}): { ve
   vf.draw()
   vf.getContext().closeGroup()
 
-  return { vexMeasures, context: vf.getContext() as SVGContext, allElements: allElementsGroup }
+  return { vexMeasures, context: vf.getContext() as ReactNativeSVGContext, allElements: allElementsGroup }
 }

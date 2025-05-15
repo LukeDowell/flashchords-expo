@@ -4,6 +4,7 @@ import {Soundfont} from 'smplr'
 import _ from "lodash";
 import {MidiPianoContext, WebAudioContext} from "@/lib/react/contexts";
 import {useWindowDimensions} from "react-native";
+import ReactNativeSVGContext from "@/lib/vexflow/ReactNativeSVGContext";
 
 export function useInterval(callback: () => void, delay: number | null) {
   const savedCallback = useRef(callback)
@@ -32,28 +33,28 @@ export function useInterval(callback: () => void, delay: number | null) {
 export const useSSRLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : () => {
 }
 
-export function useVexflowContext(outputId: string, widthOverride?: number, heightOverride?: number): [SVGContext | undefined, [number, number]] {
-  const [context, setContext] = useState<SVGContext | undefined>(undefined)
+export function useVexflowContext(widthOverride?: number, heightOverride?: number): { context?: ReactNativeSVGContext, width: number, height: number} {
+  const [context, setContext] = useState<ReactNativeSVGContext | undefined>(undefined)
   const [size, setSize] = useState<[number, number]>([0, 0])
   const {width, height} = useWindowDimensions()
 
   useEffect(() => {
-    const outputDiv = document.getElementById(outputId) as HTMLDivElement
-    if (outputDiv === null) throw new Error(`Unable to find context output element with id=${outputId}`)
-    outputDiv.innerHTML = ''
-
-    const renderer = new Renderer(outputDiv, Renderer.Backends.SVG)
+    const ctx = new ReactNativeSVGContext({width, height})
+    const renderer = new Renderer(ctx)
     const contextWidth = widthOverride ? widthOverride : width
-    const contextHeight = heightOverride ? heightOverride : 165
+    const contextHeight = heightOverride ? heightOverride : height
 
     renderer.resize(contextWidth, contextHeight)
-    const ctx = renderer.getContext()
 
-    setContext(ctx as SVGContext)
+    setContext(ctx)
     setSize([contextWidth, contextHeight])
-  }, [width, height, outputId, widthOverride, heightOverride])
+  }, [width, height, widthOverride, heightOverride])
 
-  return [context, size]
+  return {
+    context,
+    width,
+    height
+  }
 }
 
 // https://github.com/joshwcomeau/use-sound/issues/22#issuecomment-737727148

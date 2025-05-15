@@ -2,6 +2,7 @@ import React from 'react';
 import { SVGContext, Font } from 'vexflow4';
 import Svg, { G, Path, Rect } from 'react-native-svg';
 import FontPack from './NotoFontPack'
+import Animated from "react-native-reanimated";
 
 export default class ReactNativeSVGContext extends SVGContext {
 
@@ -65,6 +66,7 @@ export default class ReactNativeSVGContext extends SVGContext {
     const fontSize = this.getFontSize();
     const font = this.fontPack.getFont(attributes);
 
+    attributes.text = text;
     attributes.d = font.getPath(text, x, y, fontSize).toPathData();
     attributes.stroke = "none";
     attributes.x = x;
@@ -105,16 +107,17 @@ export default class ReactNativeSVGContext extends SVGContext {
     // Define constant
     const children = [];
     const svgClass = {
-      svg: Svg,
-      path: Path,
-      rect: Rect,
-      g: G,
+      svg: Animated.createAnimatedComponent(Svg),
+      path: Animated.createAnimatedComponent(Path),
+      rect: Animated.createAnimatedComponent(Rect),
+      g: Animated.createAnimatedComponent(G),
     };
 
     for (let i = 0; i < element.children.length; i++) {
       children.push(this.createReactElement(element.children[i]));
     }
 
+    // TODO Why do we do this?
     if (element.svgElementType === 'path') {
       delete element.props['x'];
       delete element.props['y'];
@@ -128,7 +131,6 @@ export default class ReactNativeSVGContext extends SVGContext {
   }
 
   render() {
-    console.log("rendering lul")
     return this.createReactElement(this.svg);
   }
 }

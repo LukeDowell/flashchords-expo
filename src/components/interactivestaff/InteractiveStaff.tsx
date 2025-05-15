@@ -5,7 +5,7 @@ import {Note, placeOnOctave} from "@/lib/music/Note";
 import {Chord} from "@/lib/music/Chord";
 import {notesToStaveNote} from "@/lib/vexMusic";
 import {useWindowDimensions, View} from "react-native";
-import ReactNativeSVGContext from "@/components/vexflow/ReactNativeSVGContext";
+import ReactNativeSVGContext from "@/lib/vexflow/ReactNativeSVGContext";
 
 
 type Result = {

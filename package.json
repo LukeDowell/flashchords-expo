@@ -12,6 +12,7 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@emotion/cache": "^11.14.0",
     "@emotion/native": "^11.11.0",
     "@emotion/react": "^11.14.0",

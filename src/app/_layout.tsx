@@ -7,6 +7,9 @@ import {useEffect, useState} from "react";
 import MidiPiano from "@/lib/music/MidiPiano";
 import {InstrumentContext, MidiInputContext, MidiPianoContext} from '@/lib/react/contexts';
 import {requestMIDIAccess, MIDIConnectionEvent, MIDIInput} from "react-native-midi"
+import NativeExercise from "@/components/exercises/NativeExercise";
+import DiatonicChordExercise from "@/components/exercises/DiatonicChordExercise";
+import {getKey} from "@/lib/music/Circle";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -82,9 +85,7 @@ export default function RootLayout() {
   return (
     <MidiPianoContext.Provider value={midiPiano}>
       <MidiInputContext.Provider value={midiContext}>
-        <InstrumentContext.Provider value={sample}>
-          <PracticePage />
-        </InstrumentContext.Provider>
+        <NativeExercise />
       </MidiInputContext.Provider>
     </MidiPianoContext.Provider>
   );

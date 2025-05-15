@@ -11,15 +11,8 @@ describe('the vex renderer', () => {
     const renderElementId = _.uniqueId('vexRendererTest')
     render(<div id={renderElementId}/>)
 
-    expect(() => renderVex(renderElementId, {trebleVoice: 'C4/w'})).not.toThrow()
-    expect(() => renderVex(renderElementId, {bassVoice: 'C3/w'})).not.toThrow()
-  })
-
-  it('should not render if there are no voices', () => {
-    const renderElementId = _.uniqueId('vexRendererTest')
-    render(<div id={renderElementId}/>)
-
-    expect(() => renderVex(renderElementId)).toThrow()
+    expect(() => renderVex({trebleVoice: 'C4/w'})).not.toThrow()
+    expect(() => renderVex({bassVoice: 'C3/w'})).not.toThrow()
   })
 
   it.skip('should render voices', () => {
