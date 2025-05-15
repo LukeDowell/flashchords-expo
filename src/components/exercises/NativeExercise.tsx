@@ -24,7 +24,7 @@ export default function NativeExercise(props: Props) {
 
   const sv = useSharedValue(0)
   const runAnimation = () => { sv.value = withTiming(sv.value ? 0 : 1) };
-  const animatedProps = useAnimatedStyle(() => {
+  const animatedStyle = useAnimatedStyle(() => {
     return {
       color: interpolateColor(sv.value, [0, 1], ['blue', 'violet']),
     }
@@ -37,24 +37,8 @@ export default function NativeExercise(props: Props) {
   useEffect(() => {
     if (!context || allElements.childElementCount <= 0) return
 
-    getElementsByClassName(allElements, "vf-stavenote").forEach(e => {
-      console.log(e)
-    })
-
+    // TODO trying to animate here, ideally in response to some piano MIDI input
   }, [context, allElements]);
-
-
-  function getElementsByClassName(element: SVGElement, className: string) {
-    let children: SVGElement[] = []
-    for (let child of element.children) {
-      const i = child as SVGElement
-      if (i.className === className) {
-        children.push(i)
-      }
-    }
-
-    return children
-  }
 
   return <ViewRoot>
     { context ? context.render() : false }
